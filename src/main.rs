@@ -22,12 +22,18 @@ pub fn main() -> iced::Result {
         ..Default::default()
     };
 
-    iced::application(
-        "test",
-        Phoma::update,
-        Phoma::view)
-        //.window(settings)
-        .run()
+    iced::run("test",
+              Phoma::update,
+              Phoma::view)
+
+
+
+//    iced::application(
+ //       "test",
+  //      Phoma::update,
+   //     Phoma::view)
+    //    //.window(settings)
+     //   .run()
 }
 
 struct Phoma {
