@@ -1,0 +1,10 @@
+[package]
+name = "phoma"
+version = "0.1.0"
+authors = ["Wolfgang Schröder <wolfgang.schroeder@proton.me>"]
+edition = "2024"
+publish = false
+
+[dependencies]
+iced = "0.13.1"
+
