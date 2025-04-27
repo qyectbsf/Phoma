@@ -26,7 +26,7 @@ pub fn main() -> iced::Result {
         "test",
         Phoma::update,
         Phoma::view)
-        .window(settings)
+        //.window(settings)
         .run()
 }
 
