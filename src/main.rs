@@ -22,18 +22,9 @@ pub fn main() -> iced::Result {
         ..Default::default()
     };
 
-    iced::run("test",
-              Phoma::update,
-              Phoma::view)
-
-
-
-//    iced::application(
- //       "test",
-  //      Phoma::update,
-   //     Phoma::view)
-    //    //.window(settings)
-     //   .run()
+    iced::application("test", Phoma::update, Phoma::view)
+        .window(settings)
+        .run()
 }
 
 struct Phoma {
@@ -71,7 +62,7 @@ impl Phoma {
     }
 
     fn view(&self) -> Column<Message> {
-         let mut a_content = 'a';
+        // let mut a_content = 'a';
         // let mut b_content = 'b';
         // let mut c_content = 'c';
         // let mut d_content = 'd';
@@ -127,9 +118,9 @@ impl Phoma {
         //     z_content = 'Z';
         // }
 
-        let a_button: iced::widget::Button<'_, Message, Theme, Renderer>  = iced::widget::button(text(a_content).center())
-             .width(30)
-             .height(35);
+        //let a_button: iced::widget::Button<'_, Message, Theme, Renderer>  = iced::widget::button(text(a_content).center())
+        //     .width(30)
+        //     .height(35);
         // let b_button: iced::widget::Button<'_, Message, Theme, Renderer>  = iced::widget::button(text(b_content).center())
         //     .width(30)
         //     .height(35);
@@ -253,10 +244,12 @@ impl Phoma {
     }
 }
 
-
 impl Default for Phoma {
     fn default() -> Self {
-        Phoma::new()
+        Self {
+            value: "".to_string(),
+            capitalize: false,
+        }
     }
 }
 
