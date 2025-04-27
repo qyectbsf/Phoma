@@ -2,12 +2,13 @@ use iced::Renderer;
 use iced::Theme;
 use iced::window::settings;
 
-
 use iced::widget::{button, column, row, text, Column};
 
+
+
 pub fn main() -> iced::Result {
-    let settings = iced::window::settings::Settings{
-        size: iced::Size::new(350.0, 150.0),
+    //let settings = iced::window::settings::Settings{
+       // size: iced::Size::new(350.0, 150.0),
         //position: Position,
         //min_size: Option<Size>,
         //max_size: Option<Size>,
@@ -19,24 +20,25 @@ pub fn main() -> iced::Result {
         //icon: Option<Icon>,
         //platform_specific: PlatformSpecific,
         //exit_on_close_request: bool,
-        ..Default::default()
-    };
+     //   ..Default::default()
+    //};
 
-    iced::application("test", Phoma::update, Phoma::view)
-        .window(settings)
+    iced::application("lala", Phoma::update, Phoma::view)
+        .window_size((350.0, 150.0))
         .run()
 }
 
+#[derive(Debug)]
 struct Phoma {
     value: String,
     capitalize: bool,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 enum Message {
-    Display(String),
-    Capitalize,
-    Remove,
+//    Display(String),
+//    Capitalize,
+//    Remove,
 }
 
 impl Phoma {
@@ -48,17 +50,17 @@ impl Phoma {
     }
 
     fn update(&mut self, message: Message) {
-        match message {
-            Message::Capitalize => {
-                self.capitalize = !self.capitalize;
-            }
-            Message::Display(content) => {
-                self.value = content;
-            }
-            Message::Remove => {
-                self.value = "".to_string();
-            }
-        }
+//        match message {
+//            Message::Capitalize => {
+//                self.capitalize = !self.capitalize;
+//            }
+//            Message::Display(content) => {
+//                self.value = content;
+//            }
+//            Message::Remove => {
+//                self.value = "".to_string();
+//            }
+//        }
     }
 
     fn view(&self) -> Column<Message> {
@@ -252,32 +254,3 @@ impl Default for Phoma {
         }
     }
 }
-
-
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
-//     use iced_test::selector::text;
-//     use iced_test::{Error, simulator};
-
-//     #[test]
-//     fn it_counts() -> Result<(), Error> {
-//         let mut counter = Counter { value: 0 };
-//         let mut ui = simulator(counter.view());
-
-//         let _ = ui.click(text("Display"))?;
-//         let _ = ui.click(text("Display"))?;
-//         let _ = ui.click(text("Decrement"))?;
-
-//         for message in ui.into_messages() {
-//             counter.update(message);
-//         }
-
-//         assert_eq!(counter.value, 1);
-
-//         let mut ui = simulator(counter.view());
-//         assert!(ui.find(text("1")).is_ok(), "Counter should display 1!");
-
-//         Ok(())
-//     }
-// }
