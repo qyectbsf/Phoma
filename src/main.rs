@@ -7,7 +7,7 @@ mod background;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     env_logger::init();
 
-    let connection = Connection::system().await?;
+    let connection = Connection::session().await?;
     let proxy = BackgroundProxy::new(&connection).await?;
     let mut stream = proxy.receive_running_applications_changed().await?;
 
