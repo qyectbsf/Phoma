@@ -1,24 +1,27 @@
-use std::error::Error;
+use background::BackgroundProxy;
+// NOTE: When changing this, please also keep `zbus/examples/watch-systemd-jobs.rs` in sync.
+use futures_util::stream::StreamExt;
+use zbus::{zvariant::OwnedObjectPath, proxy, Connection};
+mod background;
 
-use std::thread;
-//use std::time;
+fn main() {
+    async_io::block_on(watch_running_apps()).expect("Error listening to signal");
+}
 
-slint::include_modules!();
+async fn watch_running_apps() -> zbus::Result<()> {
+    println!("here con");
+    let connection = Connection::system().await?;
 
-fn main() -> Result<(), Box<dyn Error>> {
-    let ui = AppWindow::new()?;
+    println!("here proxy");
+    let proxy = BackgroundProxy::new(&connection).await?;
 
-    ui.on_request_increase_value({
-        let ui_handle = ui.as_weak();
-        move || {
-            let ui = ui_handle.unwrap();
-            ui.set_counter(ui.get_counter() + 1);
-            ui.hide().unwrap();
+    println!("here pre stream");
+    let mut stream = proxy.receive_running_applications_changed().await?;
+    println!("here post stream");
 
-        }
-    });
+    while let Some(msg) = stream.next().await {
+        print!("here");
+    }
 
-    ui.run()?;
-
-    Ok(())
+    panic!("Stream ended unexpectedly");
 }
