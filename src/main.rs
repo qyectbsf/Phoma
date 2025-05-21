@@ -1,26 +1,21 @@
-use core::error;
-use std::any::Any;
-
-//use background::BackgroundProxy;
 use futures_util::stream::StreamExt;
-//use virtual_keyboard::VirtualKeyboardProxy;
-//use zbus::Connection;
-//mod background;
-//mod virtual_keyboard;
+use virtual_keyboard::VirtualKeyboardProxy;
+mod virtual_keyboard;
 
-use log::{debug, error, log_enabled, info, Level};
+use log::{debug, error, info, log_enabled, Level};
 
-//use futures_util::stream::StreamExt;
-use zbus::Connection;
-use zbus::MessageStream;
-use zbus::MatchRule;
 use zbus::message::Type;
+use zbus::Connection;
+use zbus::MatchRule;
+use zbus::MessageStream;
 
 #[tokio::main]
 async fn main() -> Result<(), zbus::Error> {
     env_logger::init();
 
     let connection = Connection::session().await?;
+
+    let virutal_keyboard_proxy = VirtualKeyboardProxy::new(&connection).await?;
 
     let match_rule = MatchRule::builder()
         .msg_type(Type::Signal)
@@ -30,9 +25,9 @@ async fn main() -> Result<(), zbus::Error> {
         //.unwrap()
         .build();
 
-    let mut stream = MessageStream::for_match_rule(match_rule, &connection, None).await?;
+    let mut signal_stream = MessageStream::for_match_rule(match_rule, &connection, None).await?;
 
-    while let Some(msg) = stream.next().await {
+    while let Some(msg) = signal_stream.next().await {
         match msg {
             Ok(e) => {
                 // info!("got dbus signal:\npath: {}\ninterface: {}\nmember: {}\n",
@@ -50,40 +45,38 @@ async fn main() -> Result<(), zbus::Error> {
                           e.header().destination(),
                           e.header().sender().unwrap(),
                     );
+
+                    if e.header().member().unwrap() == "activeChanged" {
+                        let result = virutal_keyboard_proxy.active().await?;
+                        info!("{}: {}", e.header().member().unwrap(), result);
+                    }
+
+                    if e.header().member().unwrap() == "activeClientSupportsTextInputChanged" {
+                        let result = virutal_keyboard_proxy.active_client_supports_text_input().await?;
+                        info!("{}: {}", e.header().member().unwrap(), result);
+                    }
+
+                    if e.header().member().unwrap() == "availableChanged" {
+                        let result = virutal_keyboard_proxy.available().await?;
+                        info!("{}: {}", e.header().member().unwrap(), result);
+                    }
+
+                    if e.header().member().unwrap() == "enabledChanged" {
+                        let result = virutal_keyboard_proxy.enabled().await?;
+                        info!("{}: {}", e.header().member().unwrap(), result);
+                    }
+
+                    if e.header().member().unwrap() == "visibleChanged" {
+                        let result = virutal_keyboard_proxy.visible().await?;
+                        info!("{}: {}", e.header().member().unwrap(), result);
+                    }
                 }
             }
             Err(e) => {
                 error!("got error {}", e);
             }
-
         }
     }
 
     Ok(())
 }
-
-
-
-//     let connection = Connection::session().await?;
-//     let proxy = VirtualKeyboardProxy::new(&connection).await?;
-//     //let mut stream = proxy.receive_running_applications_changed().await?;
-//     let mut stream = proxy.receive_active_changed().await?;
-
-//     while let Some(_msg) = stream.next().await {
-//         log::info!("active changed signal received!");
-
-//         // Call GetAppState to get the current state
-//         match proxy.active().await {
-//             Ok(app_state) => {
-//                 log::info!("Current application state: {:?}", app_state);
-//                 // Process the app_state data
-//             }
-//             Err(e) => {
-//                 log::error!("Error getting application state: {}", e);
-//             }
-//         }
-//     }
-
-//     log::error!("Stream ended unexpectedly");
-//     Ok(())
-// }

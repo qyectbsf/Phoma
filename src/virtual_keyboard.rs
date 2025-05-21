@@ -34,25 +34,25 @@ pub trait VirtualKeyboard {
     #[zbus(name = "willShowOnActive")]
     fn will_show_on_active(&self) -> zbus::Result<bool>;
 
-    /// activeChanged signal
-    #[zbus(signal, name = "activeChanged")]
-    fn active_changed(&self) -> zbus::Result<()>;
+    // /// activeChanged signal
+    // #[zbus(signal, name = "activeChanged")]
+    // fn active_changed(&self) -> zbus::Result<()>;
 
-    /// activeClientSupportsTextInputChanged signal
-    #[zbus(signal, name = "activeClientSupportsTextInputChanged")]
-    fn active_client_supports_text_input_changed(&self) -> zbus::Result<()>;
+    // /// activeClientSupportsTextInputChanged signal
+    // #[zbus(signal, name = "activeClientSupportsTextInputChanged")]
+    //fn active_client_supports_text_input_changed(&self) -> zbus::Result<()>;
 
-    /// availableChanged signal
-    #[zbus(signal, name = "availableChanged")]
-    fn available_changed(&self) -> zbus::Result<()>;
+    // /// availableChanged signal
+    // #[zbus(signal, name = "availableChanged")]
+    // fn available_changed(&self) -> zbus::Result<()>;
 
-    /// enabledChanged signal
-    #[zbus(signal, name = "enabledChanged")]
-    fn enabled_changed(&self) -> zbus::Result<()>;
+    // /// enabledChanged signal
+    // #[zbus(signal, name = "enabledChanged")]
+    // fn enabled_changed(&self) -> zbus::Result<()>;
 
-    /// visibleChanged signal
-    #[zbus(signal, name = "visibleChanged")]
-    fn visible_changed(&self) -> zbus::Result<()>;
+    // /// visibleChanged signal
+    // #[zbus(signal, name = "visibleChanged")]
+    // fn visible_changed(&self) -> zbus::Result<()>;
 
     /// active property
     #[zbus(property, name = "active")]
