@@ -1,21 +1,24 @@
-use background::BackgroundProxy;
+//use background::BackgroundProxy;
 use futures_util::stream::StreamExt;
+use kde_virtual_keyboard::VirtualKeyboardProxy;
 use zbus::Connection;
-mod background;
+//mod background;
+mod virtual_keyboard;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     env_logger::init();
 
     let connection = Connection::session().await?;
-    let proxy = BackgroundProxy::new(&connection).await?;
-    let mut stream = proxy.receive_running_applications_changed().await?;
+    let proxy = VirtualKeyboardProxy::new(&connection).await?;
+    //let mut stream = proxy.receive_running_applications_changed().await?;
+    let mut stream = proxy.receive_active_changed().await?;
 
-    while let Some(_msg) = stream.next().await { //Note:  We ignore the msg, as it has no data
-        log::info!("RunningApplicationsChanged signal received!");
+    while let Some(_msg) = stream.next().await {
+        log::info!("active changed signal received!");
 
         // Call GetAppState to get the current state
-        match proxy.get_app_state().await {
+        match proxy.active().await {
             Ok(app_state) => {
                 log::info!("Current application state: {:?}", app_state);
                 // Process the app_state data
